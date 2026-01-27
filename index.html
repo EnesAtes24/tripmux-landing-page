@@ -73,6 +73,58 @@
       font-weight: bold;
       color: #0070f3;
     }
+
+    /* ===== AUTOCOMPLETE UI ===== */
+
+    .field {
+      position: relative;
+      display: inline-block;
+    }
+
+    .suggest .menu{
+      position:absolute;
+      left:0; right:0; top: calc(100% + 6px);
+      border:1px solid #ddd;
+      border-radius:10px;
+      background:#fff;
+      box-shadow:0 8px 24px rgba(0,0,0,.12);
+      overflow:hidden;
+      z-index:9999;
+      text-align:left;
+    }
+
+    .suggest .item{
+      padding:10px 12px;
+      cursor:pointer;
+      display:flex;
+      justify-content:space-between;
+      gap:12px;
+      align-items:flex-start;
+    }
+
+    .suggest .item:hover{ background:#f6f7f9; }
+
+    .suggest .left{
+      color:#111;
+      white-space:nowrap;
+      overflow:hidden;
+      text-overflow:ellipsis;
+      max-width: 260px;
+    }
+
+    .suggest .right{
+      color:#111;
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      opacity:.8;
+      white-space:nowrap;
+    }
+
+    .suggest .muted{
+      color:#111;
+      opacity:.65;
+      font-size:12px;
+      margin-top:2px;
+    }
   </style>
 </head>
 
@@ -82,8 +134,16 @@
     <p>Find the cheapest travel routes across flights, trains, and buses</p>
 
     <div class="search-box">
-      <input type="text" id="origin" placeholder="From (IST)" />
-      <input type="text" id="destination" placeholder="To (FCO)" />
+      <div class="field">
+        <input type="text" id="origin" placeholder="From (City or Airport)" autocomplete="off" />
+        <div id="origin-suggest" class="suggest"></div>
+      </div>
+
+      <div class="field">
+        <input type="text" id="destination" placeholder="To (City or Airport)" autocomplete="off" />
+        <div id="destination-suggest" class="suggest"></div>
+      </div>
+
       <input type="month" id="month" />
       <button onclick="searchFlights()">Search</button>
     </div>
@@ -92,12 +152,11 @@
   </div>
 
   <script>
-    // 🔥 BURAYI SONRA RENDER URL İLE DEĞİŞTİRECEĞİZ
-    const API_BASE = "https://tripmux-api.onrender.com"; // şimdilik böyle kalsın
+    const API_BASE = "https://tripmux-api.onrender.com";
 
     async function searchFlights() {
-      const origin = document.getElementById("origin").value;
-      const destination = document.getElementById("destination").value;
+      const origin = document.getElementById("origin").value.trim().toUpperCase();
+      const destination = document.getElementById("destination").value.trim().toUpperCase();
       const month = document.getElementById("month").value;
 
       if (!origin || !destination || !month) {
@@ -137,6 +196,93 @@
         document.getElementById("results").innerHTML = "Error fetching flights.";
       }
     }
+
+    /* ===== AUTOCOMPLETE LOGIC ===== */
+
+    function debounce(fn, delay = 250) {
+      let t;
+      return (...args) => {
+        clearTimeout(t);
+        t = setTimeout(() => fn(...args), delay);
+      };
+    }
+
+    async function fetchPlaces(term) {
+      const url = new URL(`${API_BASE}/api/places/autocomplete`);
+      url.searchParams.set("term", term);
+      url.searchParams.set("locale", "tr");
+
+      const res = await fetch(url.toString());
+      if (!res.ok) return [];
+      const data = await res.json();
+      return Array.isArray(data) ? data : [];
+    }
+
+    function escapeHtml(str) {
+      return String(str || "")
+        .replaceAll("&", "&amp;")
+        .replaceAll("<", "&lt;")
+        .replaceAll(">", "&gt;")
+        .replaceAll('"', "&quot;")
+        .replaceAll("'", "&#039;");
+    }
+
+    function renderMenu(container, items, onPick) {
+      container.innerHTML = "";
+      if (!items.length) return;
+
+      const menu = document.createElement("div");
+      menu.className = "menu";
+
+      items.slice(0, 8).forEach((p) => {
+        const left = `${p.name || ""}${p.country_name ? ", " + p.country_name : ""}`;
+        const right = `${(p.code || "").toUpperCase()} · ${p.type || ""}`;
+
+        const item = document.createElement("div");
+        item.className = "item";
+        item.innerHTML = `
+          <div class="left">
+            <div>${escapeHtml(left)}</div>
+            <div class="muted">${escapeHtml(p.city_name || p.airport_name || "")}</div>
+          </div>
+          <div class="right">${escapeHtml(right)}</div>
+        `;
+
+        item.addEventListener("mousedown", (e) => {
+          e.preventDefault();
+          onPick(p);
+        });
+
+        menu.appendChild(item);
+      });
+
+      container.appendChild(menu);
+    }
+
+    function setupAutocomplete(inputId, suggestId) {
+      const input = document.getElementById(inputId);
+      const suggest = document.getElementById(suggestId);
+
+      const close = () => (suggest.innerHTML = "");
+
+      const onInput = debounce(async () => {
+        const term = input.value.trim();
+        if (term.length < 2) return close();
+
+        const places = await fetchPlaces(term);
+        renderMenu(suggest, places, (p) => {
+          input.value = (p.code || "").toUpperCase();
+          close();
+        });
+      }, 250);
+
+      input.addEventListener("input", onInput);
+      input.addEventListener("blur", () => setTimeout(close, 120));
+      document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
+    }
+
+    setupAutocomplete("origin", "origin-suggest");
+    setupAutocomplete("destination", "destination-suggest");
   </script>
 </body>
 </html>
