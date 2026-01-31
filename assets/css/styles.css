@@ -1,0 +1,275 @@
+body {
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e293b);
+    color: #fff;
+    margin: 0;
+    padding: 40px 20px;
+    text-align: center;
+}
+
+.container { max-width: 900px; margin: 0 auto; }
+
+h1 { font-size: 36px; margin-bottom: 10px; }
+
+.search-box {
+    background: #ffffff;
+    color: #000;
+    padding: 22px;
+    border-radius: 12px;
+    margin-top: 30px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+input, button {
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+    border: 1px solid #d6d6d6;
+    outline: none;
+}
+
+input:focus {
+    border-color: rgba(0,112,243,.55);
+    box-shadow: 0 0 0 4px rgba(0,112,243,.12);
+}
+
+button {
+    background-color: #0070f3;
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-weight: 600;
+}
+
+button:hover { background-color: #005bd1; }
+button:disabled { opacity: .6; cursor: not-allowed; }
+
+.results { margin-top: 30px; text-align: left; }
+
+.route-row {
+    width: 100%;
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.field label {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: #0b1220;
+    margin-bottom: 6px;
+    text-align: left;
+}
+
+.swap-btn {
+    width: 40px;
+    height: 40px;
+    display: grid;
+    place-items: center;
+    font-size: 18px;
+    font-weight: 800;
+    border-radius: 12px;
+    background: #0b1220;
+    color: #fff;
+}
+
+.direction-summary {
+    width: 100%;
+    text-align: center;
+    font-size: 12px;
+    color: rgba(15,23,42,.65);
+    margin-top: 4px;
+}
+
+.card {
+    background: #ffffff;
+    color: #000;
+    padding: 15px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+}
+
+.price { font-weight: bold; color: #0070f3; }
+
+.hint {
+    width: 100%;
+    margin-top: 6px;
+    font-size: 12px;
+    opacity: .8;
+    text-align: center;
+}
+
+.errorBox{
+    width: 100%;
+    background: #fff1f2;
+    color: #7f1d1d;
+    border: 1px solid rgba(127,29,29,.15);
+    padding: 12px 14px;
+    border-radius: 12px;
+    text-align: left;
+}
+
+/* ===== Date mode tabs ===== */
+.date-mode {
+    display: inline-flex;
+    gap: 6px;
+    padding: 6px;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 14px;
+    background: #f8fafc;
+    box-shadow: 0 10px 30px rgba(0,0,0,.06);
+}
+
+.date-mode button {
+    background: transparent;
+    color: #0b1220;
+    border: 0;
+    padding: 8px 10px;
+    border-radius: 10px;
+    font-weight: 800;
+    cursor: pointer;
+}
+
+.date-mode button.active {
+    background: #0b1220;
+    color: #fff;
+}
+
+/* "----" placeholder look */
+.ghost-placeholder { position: relative; display: inline-block; }
+.ghost-placeholder::after{
+    content: "----";
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgba(15,23,42,.35);
+    pointer-events: none;
+    font-weight: 800;
+    letter-spacing: .6px;
+    display: none;
+}
+.ghost-placeholder.is-empty::after{ display: block; }
+
+/* ===== AUTOCOMPLETE UI (PREMIUM) ===== */
+.field { position: relative; display: inline-block; }
+
+.suggest .menu{
+    position:absolute;
+    left:0; top: calc(100% + 10px);
+    min-width: 340px;
+    max-width: 460px;
+    width: max-content;
+    border: 1px solid rgba(0,0,0,.08);
+    border-radius: 16px;
+    background: #fff;
+    box-shadow: 0 22px 60px rgba(0,0,0,.22);
+    overflow: hidden;
+    z-index: 9999;
+    text-align: left;
+    transform-origin: top left;
+    animation: pop .12s ease-out;
+}
+
+@keyframes pop {
+    from { transform: translateY(-4px) scale(.98); opacity: .0; }
+    to   { transform: translateY(0px)  scale(1);   opacity: 1; }
+}
+
+.suggest .item{
+    padding: 12px 12px;
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    align-items: flex-start;
+}
+
+.suggest .item:hover{ background: #f5f7fb; }
+.suggest .left{ flex: 1; min-width: 0; color: #0b1220; }
+.suggest .titleRow{ display: flex; gap: 10px; align-items: flex-start; }
+
+.suggest .icon{
+    width: 28px;
+    height: 28px;
+    border-radius: 10px;
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    font-size: 14px;
+    line-height: 1;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #f8fafc;
+    box-shadow: 0 2px 10px rgba(0,0,0,.06);
+    margin-top: 1px;
+}
+
+.suggest .icon.city{ background: #f0fdf4; border-color: rgba(22,101,52,.15); }
+.suggest .icon.airport{ background: #ecfeff; border-color: rgba(21,94,117,.15); }
+
+.suggest .title{
+    font-size: 14px;
+    font-weight: 900;
+    line-height: 1.25;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    margin-top: 1px;
+}
+
+.suggest .subtitle{
+    margin-top: 4px;
+    margin-left: 38px;
+    font-size: 12px;
+    line-height: 1.2;
+    opacity: .75;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.suggest .right{
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 6px;
+    flex: 0 0 auto;
+}
+
+.suggest .iata{
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    font-weight: 900;
+    letter-spacing: .5px;
+    padding: 6px 10px;
+    border-radius: 12px;
+    background: #eef2ff;
+    color: #1e3a8a;
+    border: 1px solid rgba(30,58,138,.15);
+}
+
+.suggest .pill{
+    font-size: 11px;
+    font-weight: 900;
+    padding: 4px 10px;
+    border-radius: 999px;
+    border: 1px solid rgba(0,0,0,.08);
+    background: #f8fafc;
+    color: rgba(15,23,42,.75);
+    text-transform: uppercase;
+    letter-spacing: .35px;
+}
+
+.suggest .pill.airport{ background: #ecfeff; color: #155e75; border-color: rgba(21,94,117,.15); }
+.suggest .pill.city{ background: #f0fdf4; color: #166534; border-color: rgba(22,101,52,.15); }
