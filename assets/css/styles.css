@@ -273,3 +273,36 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 
 .suggest .pill.airport{ background: #ecfeff; color: #155e75; border-color: rgba(21,94,117,.15); }
 .suggest .pill.city{ background: #f0fdf4; color: #166534; border-color: rgba(22,101,52,.15); }
+
+@media (max-width: 520px) {
+    body {
+        padding: 20px 12px;
+    }
+
+    .route-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .field {
+        width: 100%;
+        display: block;
+    }
+
+    .field input {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .swap-btn {
+        align-self: center;
+        width: 44px;
+        height: 44px;
+    }
+
+    .suggest .menu {
+        min-width: 100%;
+        max-width: 100%;
+        width: 100%;
+    }
+}
