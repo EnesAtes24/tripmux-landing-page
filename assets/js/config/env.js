@@ -5,11 +5,7 @@ export const API_BASE = (() => {
 
     const host = window.location.hostname;
     if (host === "localhost" || host === "127.0.0.1") {
-        return window.location.origin;
-    }
-
-    if (host === "tripmux.com" || host === "www.tripmux.com") {
-        return "https://api.tripmux.com";
+        return "";
     }
 
     return "https://api.tripmux.com";

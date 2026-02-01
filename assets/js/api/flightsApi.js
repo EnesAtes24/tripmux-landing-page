@@ -1,7 +1,9 @@
 import { API_BASE } from "../config/env.js";
 
 export async function fetchTopCheapest({ origin, destination, departureAt, currency, limit }) {
-    const url = new URL(`${API_BASE}/api/flights/cheapest/top`);
+    const url = API_BASE
+        ? new URL(`${API_BASE}/api/flights/cheapest/top`)
+        : new URL("/api/flights/cheapest/top", window.location.origin);
     url.searchParams.set("origin", origin);
     url.searchParams.set("destination", destination);
     url.searchParams.set("departureAt", departureAt);
@@ -30,7 +32,9 @@ export async function fetchTopCheapest({ origin, destination, departureAt, curre
 }
 
 export async function fetchPlaces(term) {
-    const url = new URL(`${API_BASE}/api/places/autocomplete`);
+    const url = API_BASE
+        ? new URL(`${API_BASE}/api/places/autocomplete`)
+        : new URL("/api/places/autocomplete", window.location.origin);
     url.searchParams.set("term", term);
     url.searchParams.set("locale", "tr");
 
