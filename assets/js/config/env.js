@@ -9,8 +9,8 @@ export const API_BASE = (() => {
     }
 
     if (host === "tripmux.com" || host === "www.tripmux.com") {
-        return "https://tripmux-api.onrender.com";
+        return "https://api.tripmux.com";
     }
 
-    return "https://tripmux-api.onrender.com";
+    return "https://api.tripmux.com";
 })();
