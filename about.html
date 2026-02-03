@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>About | Tripmux</title>
+    <link rel="stylesheet" href="./assets/css/styles.css" />
+    <style>
+        .site-header {
+            padding: 20px 0;
+            margin-bottom: 40px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .header-content {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo-link {
+            font-size: 24px;
+            font-weight: 700;
+            color: #ffffff;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+        }
+        .logo-link:hover {
+            opacity: 0.8;
+        }
+        .back-link {
+            font-size: 13px;
+            color: rgba(255,255,255,0.6);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .back-link:hover {
+            color: rgba(255,255,255,0.9);
+        }
+        .static-page {
+            max-width: 720px;
+            margin: 0 auto 60px;
+            padding: 50px 40px;
+            background: #ffffff;
+            color: #000;
+            border-radius: 16px;
+            line-height: 1.8;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .static-page h1 {
+            color: #0b1220;
+            margin-bottom: 32px;
+            font-size: 32px;
+        }
+        .static-page p {
+            margin-bottom: 20px;
+            font-size: 16px;
+            color: #1e293b;
+        }
+        @media (max-width: 520px) {
+            .static-page {
+                padding: 30px 24px;
+                margin: 0 16px 40px;
+            }
+            .static-page h1 {
+                font-size: 26px;
+                margin-bottom: 24px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <header class="site-header">
+        <div class="header-content">
+            <a href="/" class="logo-link">Tripmux</a>
+            <a href="/" class="back-link">← Home</a>
+        </div>
+    </header>
+    <div class="static-page">
+        <h1>About Tripmux</h1>
+        <p>Tripmux is a travel search platform focused on helping travelers find cheaper routes by combining different transportation options.</p>
+        <p>Instead of only showing direct flights, Tripmux explores alternative nearby cities and future combinations of flights, trains, and buses to reduce the total cost of travel.</p>
+        <p>Our goal is simple: not the fastest route, but the cheapest total journey.</p>
+        <p>Tripmux is currently in its early stage (MVP) and already provides live flight price comparisons. We are actively expanding to include rail and bus connections across Europe and beyond.</p>
+        <p>Our mission is to make smarter travel accessible to everyone by using price optimization instead of traditional route search logic.</p>
+    </div>
+</div>
+</body>
+</html>

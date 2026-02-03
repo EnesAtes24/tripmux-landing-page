@@ -45,7 +45,7 @@ export function renderFlights(container, flights, yearMode, monthKeyFromFlight) 
             <div>${flight.from} → ${flight.to}</div>
             <div>Date: ${flight.date || "—"} | Duration: ${flight.durationMinutes} min</div>
             <div class=\"price\">€${flight.price}</div>
-            <a href=\"${flight.aviasalesUrl}\" target=\"_blank\">View Deal</a>
+            <a href=\"${flight.aviasalesUrl}\" target=\"_blank\">View ticket on partner site</a>
           </div>
         `;
     });
