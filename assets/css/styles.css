@@ -830,3 +830,107 @@ img:not(.nav-logo) {
     max-width: 100%;
     height: auto;
 }
+
+/* ===== FLIGHT RESULT CARDS - Clean Separation ===== */
+.results-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    max-width: 980px;
+    margin: 18px auto 40px auto;
+    padding: 0 16px;
+}
+
+.flight-card {
+    background: #ffffff;
+    border-radius: 18px;
+    padding: 22px 24px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.18);
+    color: #0A1A3E;
+}
+
+.flight-card__header {
+    font-size: 22px;
+    font-weight: 800;
+    margin: 0 0 14px 0;
+}
+
+.flight-card__meta {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin: 0 0 16px 0;
+    color: rgba(10,26,62,.78);
+    font-size: 16px;
+    font-weight: 600;
+}
+
+.flight-meta-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.flight-meta-icon {
+    width: 20px;
+    height: 20px;
+    opacity: .75;
+    flex: 0 0 auto;
+}
+
+.flight-price {
+    font-size: 36px;
+    font-weight: 900;
+    color: #0B5BFF;
+    margin: 0 0 14px 0;
+}
+
+.partner-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #eef2f7;
+    color: #0A1A3E;
+    padding: 12px 16px;
+    border-radius: 14px;
+    text-decoration: none;
+    font-weight: 800;
+    font-size: 16px;
+}
+
+.partner-btn:hover {
+    filter: brightness(.98);
+}
+
+.partner-btn:focus-visible {
+    outline: 3px solid rgba(0,163,255,.45);
+    outline-offset: 3px;
+}
+
+.partner-note {
+    margin-top: 12px;
+    color: rgba(10,26,62,.45);
+    font-style: italic;
+    font-size: 14px;
+}
+
+@media (max-width: 768px) {
+    .flight-card {
+        padding: 18px 16px;
+        border-radius: 16px;
+    }
+    
+    .flight-card__header {
+        font-size: 18px;
+    }
+    
+    .flight-price {
+        font-size: 30px;
+    }
+    
+    .partner-btn {
+        font-size: 14px;
+        padding: 10px 12px;
+        border-radius: 12px;
+    }
+}
