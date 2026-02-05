@@ -4,82 +4,45 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Privacy Policy | Tripmux</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
+    <link rel="icon" type="image/png" href="/public/favicon.png">
     <link rel="stylesheet" href="./assets/css/styles.css" />
-    <style>
-        .site-header {
-            padding: 20px 0;
-            margin-bottom: 40px;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-        }
-        .header-content {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 0 20px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-        }
-        .logo-link {
-            font-size: 24px;
-            font-weight: 700;
-            color: #ffffff;
-            text-decoration: none;
-            transition: opacity 0.2s ease;
-        }
-        .logo-link:hover {
-            opacity: 0.8;
-        }
-        .back-link {
-            font-size: 13px;
-            color: rgba(255,255,255,0.6);
-            text-decoration: none;
-            font-weight: 500;
-            transition: color 0.2s ease;
-        }
-        .back-link:hover {
-            color: rgba(255,255,255,0.9);
-        }
-        .static-page {
-            max-width: 720px;
-            margin: 0 auto 60px;
-            padding: 50px 40px;
-            background: #ffffff;
-            color: #000;
-            border-radius: 16px;
-            line-height: 1.8;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
-        }
-        .static-page h1 {
-            color: #0b1220;
-            margin-bottom: 32px;
-            font-size: 32px;
-        }
-        .static-page p {
-            margin-bottom: 20px;
-            font-size: 16px;
-            color: #1e293b;
-        }
-        @media (max-width: 520px) {
-            .static-page {
-                padding: 30px 24px;
-                margin: 0 16px 40px;
-            }
-            .static-page h1 {
-                font-size: 26px;
-                margin-bottom: 24px;
-            }
-        }
-    </style>
 </head>
 <body>
-<div class="container">
-    <header class="site-header">
-        <div class="header-content">
-            <a href="/" class="logo-link"><img src="/tripmux-logo-light.svg" alt="Tripmux" class="tmx-logo"></a>
-            <a href="/" class="back-link">← Home</a>
-        </div>
-    </header>
+  <header class="tmx-navbar">
+    <div class="tmx-navbar__inner">
+      <a class="tmx-brand" href="/">
+        <img src="/public/tripmux-logo-light.svg" alt="Tripmux" class="tmx-logo">
+      </a>
+
+      <nav class="tmx-nav" aria-label="Primary">
+        <a href="/index.html#how" class="tmx-nav__link">How it works</a>
+        <a href="/index.html#partners" class="tmx-nav__link">Partners</a>
+        <a href="/about.html" class="tmx-nav__link">About</a>
+        <a href="/contact.html" class="tmx-nav__link">Contact</a>
+      </nav>
+
+      <div class="tmx-actions">
+        <a href="/index.html#search" class="tmx-cta">Find cheapest route</a>
+        <button class="tmx-burger" aria-label="Open menu" aria-expanded="false" type="button">
+          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <line x1="3" y1="12" x2="21" y2="12"></line>
+            <line x1="3" y1="6" x2="21" y2="6"></line>
+            <line x1="3" y1="18" x2="21" y2="18"></line>
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <div class="tmx-mobile-menu" hidden>
+      <a href="/index.html#how" class="tmx-mobile-link">How it works</a>
+      <a href="/index.html#partners" class="tmx-mobile-link">Partners</a>
+      <a href="/about.html" class="tmx-mobile-link">About</a>
+      <a href="/contact.html" class="tmx-mobile-link">Contact</a>
+      <a href="/index.html#search" class="tmx-mobile-cta">Find cheapest route</a>
+    </div>
+  </header>
+
+  <div class="container">
     <div class="static-page">
         <h1>Privacy Policy</h1>
         <p>Tripmux respects your privacy.</p>
@@ -89,5 +52,23 @@
         <p>By using this website, you agree to the use of cookies and analytics technologies as described above.</p>
     </div>
 </div>
+
+<footer class="site-footer">
+    <div class="container">
+        <div class="footer-links">
+            <a href="/about.html">About</a>
+            <span class="footer-separator">|</span>
+            <a href="/contact.html">Contact</a>
+            <span class="footer-separator">|</span>
+            <a href="/privacy-policy.html">Privacy Policy</a>
+            <span class="footer-separator">|</span>
+            <a href="/terms-of-service.html">Terms of Service</a>
+        </div>
+        <p class="footer-tagline">Tripmux compares prices from trusted travel partners.</p>
+        <p class="footer-copyright">© 2026 Tripmux. All rights reserved.</p>
+    </div>
+</footer>
+
+<script type="module" src="./assets/js/main.js"></script>
 </body>
 </html>
