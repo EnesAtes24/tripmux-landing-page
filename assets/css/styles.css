@@ -815,9 +815,14 @@ button:disabled { opacity: .6; cursor: not-allowed; }
     height: 36px !important;
     width: auto !important;
     max-height: 36px !important;
-    max-width: none !important;
-    object-fit: contain !important;
     display: block;
+}
+
+@media (max-width: 768px) {
+    .nav-logo {
+        height: 28px !important;
+        max-height: 28px !important;
+    }
 }
 
 /* Keep other images responsive but do NOT affect the logo */
