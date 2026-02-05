@@ -22,6 +22,16 @@ h1 {
     margin-bottom: 12px; 
 }
 
+.tmx-logo {
+    height: 36px;
+}
+
+@media (max-width: 768px) {
+    .tmx-logo {
+        height: 30px;
+    }
+}
+
 .hero-subtitle {
     font-size: 18px;
     margin-bottom: 8px;
@@ -142,43 +152,80 @@ button:disabled { opacity: .6; cursor: not-allowed; }
     box-shadow: 0 6px 20px rgba(0,0,0,0.12), 0 2px 8px rgba(0,0,0,0.08);
 }
 
-.card > div:first-child strong {
-    font-size: 17px;
+.card-airline {
+    margin-bottom: 16px;
+}
+
+.card-airline strong {
+    font-size: 18px;
     font-weight: 700;
     color: #0b1220;
 }
 
-.card > div:nth-child(2) {
-    font-size: 13px;
+.airline-code {
+    font-size: 14px;
     color: #64748b;
-    margin: 10px 0;
+    font-weight: 400;
 }
 
-.card > div:nth-child(3) {
-    font-size: 12px;
-    color: #94a3b8;
+.card-info-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
     margin: 8px 0;
+}
+
+.info-icon {
+    flex-shrink: 0;
+    color: #64748b;
+    width: 16px;
+    height: 16px;
+}
+
+.info-text {
+    font-size: 14px;
+    color: #475569;
 }
 
 .price { 
     font-weight: 800; 
-    color: #0061d5;
-    font-size: 24px;
-    margin: 14px 0;
+    color: #0055cc;
+    font-size: 28px;
+    margin: 18px 0 16px;
+    letter-spacing: -0.5px;
 }
 
-.card a {
-    color: #0061d5;
+.cta-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #f1f5f9;
+    color: #0b1220;
     text-decoration: none;
     font-weight: 600;
     font-size: 14px;
-    display: inline-block;
+    padding: 12px 20px;
+    border-radius: 10px;
+    transition: all 0.2s ease;
     margin-top: 8px;
 }
 
-.card a:hover {
-    text-decoration: underline;
-    color: #004fb3;
+.cta-button:hover {
+    background: #e2e8f0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    transform: translateY(-1px);
+}
+
+.external-icon {
+    flex-shrink: 0;
+    opacity: 0.7;
+}
+
+.card-disclaimer {
+    font-size: 11px;
+    color: #94a3b8;
+    margin: 10px 0 0;
+    font-style: italic;
 }
 
 .hint {
@@ -419,6 +466,13 @@ button:disabled { opacity: .6; cursor: not-allowed; }
 
     .info-section p {
         font-size: 15px;
+    }
+
+    .cta-button {
+        display: flex;
+        width: 100%;
+        justify-content: center;
+        padding: 14px 20px;
     }
 
     .footer-links {
