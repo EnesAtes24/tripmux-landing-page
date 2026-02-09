@@ -142,14 +142,9 @@ export async function initLocale() {
 
     // Resolve effective currency
     if (selectedCurrency === "AUTO") {
-        // Try to use cached auto-resolved value first
-        const cached = localStorage.getItem(CURRENCY_AUTO_RESOLVED_KEY);
-        if (cached && SUPPORTED_CURRENCIES.includes(cached)) {
-            effectiveCurrency = cached;
-        } else {
-            effectiveCurrency = await fetchSuggestedCurrency();
-            localStorage.setItem(CURRENCY_AUTO_RESOLVED_KEY, effectiveCurrency);
-        }
+        // Always fetch fresh on page load (don't use cache)
+        effectiveCurrency = await fetchSuggestedCurrency();
+        localStorage.setItem(CURRENCY_AUTO_RESOLVED_KEY, effectiveCurrency);
     } else {
         effectiveCurrency = selectedCurrency;
     }

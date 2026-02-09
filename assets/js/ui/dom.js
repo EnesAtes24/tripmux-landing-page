@@ -140,7 +140,7 @@ function renderFlightCard(flight, yearMode, monthKeyFromFlight, index, requested
                     <div class="fc-datetime">${flight.date || "—"} ${flight.departTime ? "· " + flight.departTime : ""} ${monthTag}</div>
                 </div>
                 <div class="fc-right">
-                    ${index === 0 ? `<div class="fc-badge-wrapper"><span class="fc-badge">${t("bestPrice")}</span></div>` : ""}
+                    <div class="fc-badge-wrapper">${index === 0 ? `<span class="fc-badge">${t("bestPrice")}</span>` : ""}</div>
                     <div class="fc-duration">${formatDuration(flight.durationMinutes)}</div>
                     ${stopsLabel(flight.transfers)}
                     <div class="fc-price">${formatPrice(flight.price, displayCurrency)}</div>

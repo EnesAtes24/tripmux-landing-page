@@ -114,15 +114,20 @@ export async function searchFlights() {
 
     const passengers = getPassengersValue();
 
+    // Debug log for currency verification
+    console.debug(`[Tripmux] Search request: currency=${currency}, origin=${origin}, destination=${destination}, departureAt=${departureAt}, passengers=${passengers}`);
+
     setLoading(true);
 
     try {
         if (getDateMode() === "year") {
             const raw = await fetchTopCheapest({ origin, destination, departureAt, currency, limit: 12, passengers });
+            console.debug(`[Tripmux] Year mode response: ${raw.length} flights, first currency: ${raw[0]?.currency || 'N/A'}`);
             const monthly = pickCheapestPerMonth(raw);
             renderFlights(getResultsEl(), monthly, true, monthKeyFromFlight, passengers);
         } else {
             const data = await fetchTopCheapest({ origin, destination, departureAt, currency, passengers });
+            console.debug(`[Tripmux] Response: ${data.length} flights, first currency: ${data[0]?.currency || 'N/A'}`);
             renderFlights(getResultsEl(), data, false, monthKeyFromFlight, passengers);
         }
     } catch (err) {
