@@ -1,3 +1,5 @@
+import { t, getEffectiveCurrency, getLang } from "../i18n/locale.js";
+
 export function getResultsEl() {
     return document.getElementById("results");
 }
@@ -18,6 +20,39 @@ export function getDestinationInput() {
     return document.getElementById("destination");
 }
 
+export function getPassengersInput() {
+    return document.getElementById("passengers");
+}
+
+/**
+ * Read and sanitize the passengers value from the input.
+ * Returns an integer between 1 and 9.
+ */
+export function getPassengersValue() {
+    const input = getPassengersInput();
+    if (!input) return 1;
+    const val = parseInt(input.value, 10);
+    if (isNaN(val) || val < 1) return 1;
+    if (val > 9) return 9;
+    return val;
+}
+
+/**
+ * Clamp the passengers input to valid range (called on blur/change).
+ */
+export function clampPassengersInput() {
+    const input = getPassengersInput();
+    if (!input) return;
+    const val = parseInt(input.value, 10);
+    if (isNaN(val) || val < 1) {
+        input.value = "1";
+    } else if (val > 9) {
+        input.value = "9";
+    } else {
+        input.value = String(val);
+    }
+}
+
 export function setHint(text) {
     document.getElementById("hint").textContent = text || "";
 }
@@ -30,77 +65,144 @@ export function updateGhostPlaceholder() {
 }
 
 /**
- * Inject flight card styles into page head (self-contained rendering)
- * Guarantees styles even if external CSS fails
+ * Format money using Intl.NumberFormat with proper locale and currency.
  */
-function injectFlightCardStyles() {
-    if (!document.getElementById('flight-card-styles')) {
-        const style = document.createElement('style');
-        style.id = 'flight-card-styles';
-        style.textContent = `.results-list{display:flex;flex-direction:column;gap:16px;max-width:980px;margin:18px auto 40px auto;padding:0 16px;} .flight-card{background:#fff;border-radius:18px;padding:22px 24px;box-shadow:0 10px 30px rgba(0,0,0,.18);color:#0A1A3E;text-align:left;} .flight-header{font-size:22px;font-weight:800;margin:0 0 12px 0;display:flex;gap:8px;align-items:baseline;flex-wrap:wrap;} .flight-code{font-size:16px;font-weight:700;color:rgba(10,26,62,.55);} .flight-meta{display:flex;flex-direction:column;gap:10px;margin:0 0 16px 0;color:rgba(10,26,62,.78);font-size:16px;font-weight:600;} .meta-row{display:flex;align-items:center;gap:10px;} .meta-ico{width:20px;height:20px;opacity:.75;flex:0 0 auto;} .flight-price{font-size:36px;font-weight:900;color:#0B5BFF;margin:0 0 14px 0;} .partner-btn{display:inline-flex;align-items:center;gap:10px;background:#00A3FF;color:#fff;padding:12px 16px;border-radius:14px;text-decoration:none;font-weight:800;font-size:16px;} .partner-btn:hover{filter:brightness(.95);} .partner-btn svg{width:18px;height:18px;opacity:.95;} .partner-note{margin-top:12px;color:rgba(10,26,62,.45);font-style:italic;font-size:14px;} @media(max-width:768px){ .flight-card{padding:18px 16px;border-radius:16px;} .flight-header{font-size:18px;} .flight-price{font-size:30px;} .partner-btn{font-size:14px;padding:10px 12px;border-radius:12px;} .partner-note{font-size:13px;} }`;
-        document.head.appendChild(style);
+function formatMoney(amount, currency) {
+    const lang = getLang();
+    const locale = lang === "tr" ? "tr-TR" : "en-US";
+    
+    try {
+        const formatter = new Intl.NumberFormat(locale, {
+            style: "currency",
+            currency: currency,
+            minimumFractionDigits: 0,
+            maximumFractionDigits: 0,
+        });
+        return formatter.format(amount);
+    } catch (e) {
+        // Fallback if currency is invalid
+        console.warn(`Invalid currency for formatting: ${currency}`, e);
+        const symbols = { EUR: "€", TRY: "₺", USD: "$" };
+        const sym = symbols[currency] || currency + " ";
+        return `${sym}${Number(amount).toLocaleString(locale)}`;
     }
 }
 
 /**
- * Render a single flight card with exact class names and inline SVG icons
+ * Format price with currency symbol (backward compatibility wrapper).
  */
-function renderFlightCard(flight, yearMode, monthKeyFromFlight) {
-    const monthLabel = yearMode ? ` <span class="flight-code">(${monthKeyFromFlight(flight)})</span>` : "";
+function formatPrice(price, currency) {
+    return formatMoney(price, currency);
+}
+
+/**
+ * Format duration minutes into "Xh Ym".
+ */
+function formatDuration(mins) {
+    if (!mins || mins <= 0) return "—";
+    const h = Math.floor(mins / 60);
+    const m = mins % 60;
+    if (h === 0) return `${m}m`;
+    if (m === 0) return `${h}h`;
+    return `${h}h ${m}m`;
+}
+
+/**
+ * Get stops label from transfer count.
+ */
+function stopsLabel(transfers) {
+    if (transfers === 0 || transfers == null) {
+        return `<span class="fc-stops fc-stops--direct">${t("direct")}</span>`;
+    }
+    const word = transfers === 1 ? t("stop") : t("stops");
+    return `<span class="fc-stops">${transfers} ${word}</span>`;
+}
+
+/**
+ * Render a single flight card — 3-zone horizontal layout.
+ */
+function renderFlightCard(flight, yearMode, monthKeyFromFlight, index, requestedCurrency) {
+    // Use response currency if available, otherwise fall back to requested
+    const responseCurrency = (flight.currency || "").toUpperCase();
+    const displayCurrency = (responseCurrency && ["TRY", "EUR", "USD"].includes(responseCurrency))
+        ? responseCurrency
+        : (requestedCurrency || getEffectiveCurrency() || "EUR");
     
+    const bestClass = index === 0 ? " fc--best" : "";
+    const monthTag = yearMode ? `<span class="fc-month">${monthKeyFromFlight(flight)}</span>` : "";
+
     return `
-        <div class="flight-card">
-            <div class="flight-header">
-                <span>${flight.airlineName}</span>
-                <span class="flight-code">(${flight.airlineCode})</span>
-                ${monthLabel}
-            </div>
-            
-            <div class="flight-meta">
-                <div class="meta-row">
-                    <svg class="meta-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M7 7h10M7 17h10M10 10l-3-3 3-3M14 14l3 3-3 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <span>${flight.from} → ${flight.to}</span>
+        <div class="flight-card${bestClass}">
+            <div class="fc-body">
+                <div class="fc-left">
+                    <div class="fc-route">${flight.from} <span class="fc-arrow">→</span> ${flight.to}</div>
+                    <div class="fc-airline">${flight.airlineName} <span class="fc-code">${flight.airlineCode}</span></div>
+                    <div class="fc-datetime">${flight.date || "—"} ${flight.departTime ? "· " + flight.departTime : ""} ${monthTag}</div>
                 </div>
-                
-                <div class="meta-row">
-                    <svg class="meta-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M8 2v3M16 2v3M3 9h18M5 5h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-                    <span>${flight.date || "—"}</span>
-                </div>
-                
-                <div class="meta-row">
-                    <svg class="meta-ico" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 8v5l3 2" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" stroke="currentColor" stroke-width="2"/></svg>
-                    <span>${flight.durationMinutes} min</span>
+                <div class="fc-right">
+                    ${index === 0 ? `<div class="fc-badge-wrapper"><span class="fc-badge">${t("bestPrice")}</span></div>` : ""}
+                    <div class="fc-duration">${formatDuration(flight.durationMinutes)}</div>
+                    ${stopsLabel(flight.transfers)}
+                    <div class="fc-price">${formatPrice(flight.price, displayCurrency)}</div>
+                    <a href="${flight.aviasalesUrl}" target="_blank" rel="noopener noreferrer" class="fc-cta">
+                        ${t("openPartner")}
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none"><path d="M14 3h7v7" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14L21 3" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 14v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </a>
                 </div>
             </div>
-            
-            <div class="flight-price">€${flight.price}</div>
-            
-            <a href="${flight.aviasalesUrl}" target="_blank" rel="noopener noreferrer" class="partner-btn">
-                Open on partner site
-                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M14 3h7v7" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M10 14L21 3" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M21 14v5a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2h5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </a>
-            
-            <div class="partner-note">Purchase is completed on the partner's website.</div>
+            <div class="fc-disclaimer">${t("partnerNote")}</div>
         </div>
     `;
 }
 
-export function renderFlights(container, flights, yearMode, monthKeyFromFlight) {
-    // Inject styles into head (self-contained, guaranteed to work)
-    injectFlightCardStyles();
-    
-    // Set container class and clear previous results
+export function renderFlights(container, flights, yearMode, monthKeyFromFlight, passengers) {
     container.className = 'results-list';
     container.innerHTML = "";
 
     if (!flights || flights.length === 0) {
-        container.innerHTML = "No results.";
+        container.innerHTML = t("noResults");
         return;
     }
 
-    // Render all flight cards
-    const cardsHtml = flights.map(flight => renderFlightCard(flight, yearMode, monthKeyFromFlight)).join('');
-    container.innerHTML = cardsHtml;
+    const pax = (flights[0] && flights[0].passengers > 0)
+        ? flights[0].passengers
+        : (passengers || 1);
+
+    // Check for currency mismatch
+    const requestedCurrency = getEffectiveCurrency();
+    let currencyWarning = "";
+    let hasMismatch = false;
+
+    if (flights.length > 0) {
+        const firstFlight = flights[0];
+        const responseCurrency = (firstFlight.currency || "").toUpperCase();
+        
+        if (responseCurrency && responseCurrency !== requestedCurrency && ["TRY", "EUR", "USD"].includes(responseCurrency)) {
+            hasMismatch = true;
+            const currencyNames = { EUR: "EUR", TRY: "TRY", USD: "USD" };
+            const responseName = currencyNames[responseCurrency] || responseCurrency;
+            const warningText = (t("currencyMismatchWarning") || "Prices returned in {currency} (provider limitation).").replace("{currency}", responseName);
+            currencyWarning = `<div class="currency-warning" style="background: #fff3cd; color: #856404; padding: 8px 12px; border-radius: 8px; margin-bottom: 12px; font-size: 13px; border-left: 3px solid #ffc107;">
+                ⚠️ ${warningText}
+            </div>`;
+            
+            console.warn(`Currency mismatch: requested ${requestedCurrency}, received ${responseCurrency}`, {
+                requested: requestedCurrency,
+                received: responseCurrency,
+                flights: flights.length
+            });
+        }
+    }
+
+    let paxInfo = "";
+    if (pax > 1) {
+        const paxInfoFn = t("paxInfo");
+        const paxText = typeof paxInfoFn === "function" ? paxInfoFn(pax) : `Prices shown for ${pax} passengers`;
+        paxInfo = `<div class="pax-info">${paxText}</div>`;
+    }
+
+    const cardsHtml = flights.map((flight, i) => renderFlightCard(flight, yearMode, monthKeyFromFlight, i, requestedCurrency)).join('');
+    container.innerHTML = paxInfo + currencyWarning + cardsHtml;
 }
 
 export function escapeHtml(str) {
@@ -181,10 +283,10 @@ export function setLoading(isLoading) {
     const btn = getSearchButton();
     if (isLoading) {
         btn.disabled = true;
-        btn.textContent = "Loading...";
-        getResultsEl().innerHTML = "Loading...";
+        btn.textContent = t("loading");
+        getResultsEl().innerHTML = t("loading");
     } else {
         btn.disabled = false;
-        btn.textContent = "Search";
+        btn.textContent = t("search");
     }
 }

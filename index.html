@@ -16,14 +16,14 @@
       </a>
 
       <nav class="tmx-nav" aria-label="Primary">
-        <a href="#how" class="tmx-nav__link">How it works</a>
-        <a href="#partners" class="tmx-nav__link">Partners</a>
-        <a href="/about.html" class="tmx-nav__link">About</a>
-        <a href="/contact.html" class="tmx-nav__link">Contact</a>
+        <a href="#how" class="tmx-nav__link" data-i18n="navHow">How it works</a>
+        <a href="#partners" class="tmx-nav__link" data-i18n="navPartners">Partners</a>
+        <a href="/about.html" class="tmx-nav__link" data-i18n="navAbout">About</a>
+        <a href="/contact.html" class="tmx-nav__link" data-i18n="navContact">Contact</a>
       </nav>
 
       <div class="tmx-actions">
-        <a href="#search" class="tmx-cta">Find cheapest route</a>
+        <a href="#search" class="tmx-cta" data-i18n="navCta">Find cheapest route</a>
         <button class="tmx-burger" aria-label="Open menu" aria-expanded="false" type="button">
           <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <line x1="3" y1="12" x2="21" y2="12"></line>
@@ -35,72 +35,138 @@
     </div>
 
     <div class="tmx-mobile-menu" hidden>
-      <a href="#how" class="tmx-mobile-link">How it works</a>
-      <a href="#partners" class="tmx-mobile-link">Partners</a>
-      <a href="/about.html" class="tmx-mobile-link">About</a>
-      <a href="/contact.html" class="tmx-mobile-link">Contact</a>
-      <a href="#search" class="tmx-mobile-cta">Find cheapest route</a>
+      <a href="#how" class="tmx-mobile-link" data-i18n="navHow">How it works</a>
+      <a href="#partners" class="tmx-mobile-link" data-i18n="navPartners">Partners</a>
+      <a href="/about.html" class="tmx-mobile-link" data-i18n="navAbout">About</a>
+      <a href="/contact.html" class="tmx-mobile-link" data-i18n="navContact">Contact</a>
+      <a href="#search" class="tmx-mobile-cta" data-i18n="navCta">Find cheapest route</a>
     </div>
   </header>
 
   <div class="container">
     <div class="hero-area">
-    <h1 class="hero-headline">Find the cheapest total route.</h1>
-        <p class="hero-subtext">Compare flights now. Trains & buses coming soon.</p>
+    <h1 class="hero-headline" data-i18n="heroHeadline">Find the cheapest total route.</h1>
+        <p class="hero-subtext" data-i18n="heroSubtext">Compare flights now. Trains & buses coming soon.</p>
     </div>
 
     <div class="search-box" id="search">
+        <!-- Preferences toolbar (Language + Currency) — top-right, compact -->
+        <div class="locale-bar" id="localeBar">
+            <div class="locale-toggle" id="langToggle" role="radiogroup" aria-label="Language">
+                <button type="button" class="locale-btn" data-lang="tr">TR</button>
+                <button type="button" class="locale-btn active" data-lang="en">EN</button>
+            </div>
+            <div class="cur-dropdown" id="curDropdown">
+                <button type="button" class="cur-trigger" id="curTrigger" aria-haspopup="listbox" aria-expanded="false">
+                    <span class="cur-trigger__label" id="curLabel">€ EUR</span>
+                    <svg class="cur-trigger__arrow" width="10" height="6" viewBox="0 0 10 6" aria-hidden="true">
+                        <path d="M1 1l4 4 4-4" stroke="currentColor" fill="none" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                </button>
+                <div class="cur-panel" id="curPanel" role="listbox" hidden>
+                    <button type="button" class="cur-option" data-value="AUTO" role="option">
+                        <span class="cur-option__icon">🌍</span>
+                        <span class="cur-option__text">Auto</span>
+                        <svg class="cur-option__check" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7l3 3 6-6" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button type="button" class="cur-option" data-value="TRY" role="option">
+                        <span class="cur-option__icon">₺</span>
+                        <span class="cur-option__text">TRY</span>
+                        <svg class="cur-option__check" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7l3 3 6-6" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button type="button" class="cur-option" data-value="EUR" role="option">
+                        <span class="cur-option__icon">€</span>
+                        <span class="cur-option__text">EUR</span>
+                        <svg class="cur-option__check" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7l3 3 6-6" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                    <button type="button" class="cur-option" data-value="USD" role="option">
+                        <span class="cur-option__icon">$</span>
+                        <span class="cur-option__text">USD</span>
+                        <svg class="cur-option__check" width="14" height="14" viewBox="0 0 14 14" aria-hidden="true"><path d="M2.5 7l3 3 6-6" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
         <div class="route-row">
       <div class="field">
-                <label for="origin">From</label>
-                <input type="text" id="origin" placeholder="Origin (City or Airport)" autocomplete="off" />
+                <label for="origin" data-i18n="from">From</label>
+                <input type="text" id="origin" data-i18n-placeholder="originPlaceholder" placeholder="Origin (City or Airport)" autocomplete="off" />
         <div id="origin-suggest" class="suggest"></div>
       </div>
 
             <button id="swapBtn" class="swap-btn" type="button" aria-label="Swap origin and destination">⇄</button>
 
       <div class="field">
-                <label for="destination">To</label>
-                <input type="text" id="destination" placeholder="Destination (City or Airport)" autocomplete="off" />
+                <label for="destination" data-i18n="to">To</label>
+                <input type="text" id="destination" data-i18n-placeholder="destinationPlaceholder" placeholder="Destination (City or Airport)" autocomplete="off" />
         <div id="destination-suggest" class="suggest"></div>
       </div>
         </div>
 
         <div class="direction-summary" id="directionSummary"></div>
 
-        <div class="date-mode" aria-label="Date mode">
-            <button id="mode-day" class="active" type="button">Day</button>
-            <button id="mode-month" type="button">Month</button>
-            <button id="mode-year" type="button">Year</button>
+        <div class="controls-row">
+            <div class="form-field">
+                <div class="form-label form-label--spacer"></div>
+                <div class="form-control">
+                    <div class="date-mode" aria-label="Date mode">
+                        <button id="mode-day" class="active" type="button" data-i18n="day">Day</button>
+                        <button id="mode-month" type="button" data-i18n="month">Month</button>
+                        <button id="mode-year" type="button" data-i18n="year">Year</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-field form-field--date">
+                <div class="form-label form-label--spacer"></div>
+                <div class="form-control">
+                    <span id="dateWrap" class="ghost-placeholder is-empty">
+                        <input id="departureAt" type="date" />
+                    </span>
+                </div>
+            </div>
+
+            <div class="form-field passengers-field">
+                <label for="passengers" class="form-label" data-i18n="passengers">Passengers</label>
+                <div class="form-control">
+                    <div class="passengers-control">
+                        <button id="paxMinus" type="button" class="pax-btn" aria-label="Decrease passengers">−</button>
+                        <input id="passengers" type="number" min="1" max="9" value="1" inputmode="numeric" />
+                        <button id="paxPlus" type="button" class="pax-btn" aria-label="Increase passengers">+</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-field">
+                <div class="form-label form-label--spacer"></div>
+                <div class="form-control">
+                    <button id="searchBtn" type="button" data-i18n="search">Search</button>
+                </div>
+            </div>
         </div>
-
-        <span id="dateWrap" class="ghost-placeholder is-empty">
-        <input id="departureAt" type="date" />
-      </span>
-
-        <button id="searchBtn" type="button">Search</button>
 
         <div class="hint" id="hint"></div>
     </div>
 
-    <p class="trust-signal">Tripmux compares prices from trusted travel partners.</p>
+    <p class="trust-signal" data-i18n="trustSignal">Tripmux compares prices from trusted travel partners.</p>
 
     <div class="results-list" id="results"></div>
 
     <section id="how" class="info-section">
-        <h2>How it works</h2>
+        <h2 data-i18n="howTitle">How it works</h2>
         <div class="section-content">
-            <p>We search flights and compare prices from trusted travel partners.</p>
-            <p>Soon we'll combine trains and buses to find even cheaper multi-modal routes.</p>
-            <p class="note-text">Rail & bus routes are coming soon.</p>
+            <p data-i18n="howP1">We search flights and compare prices from trusted travel partners.</p>
+            <p data-i18n="howP2">Soon we'll combine trains and buses to find even cheaper multi-modal routes.</p>
+            <p class="note-text" data-i18n="howNote">Rail & bus routes are coming soon.</p>
         </div>
     </section>
 
     <section id="partners" class="info-section">
-        <h2>Partners</h2>
+        <h2 data-i18n="partnersTitle">Partners</h2>
         <div class="section-content">
-            <p>We compare prices from trusted travel partners.</p>
-            <p class="partner-list">Travelpayouts / Aviasales (live) · Kiwi (planned) · Omio (planned) · Flixbus (planned)</p>
+            <p data-i18n="partnersP1">We compare prices from trusted travel partners.</p>
+            <p class="partner-list" data-i18n="partnersList">Travelpayouts / Aviasales (live) · Kiwi (planned) · Omio (planned) · Flixbus (planned)</p>
         </div>
     </section>
   </div>
@@ -116,8 +182,8 @@
             <span class="footer-separator">|</span>
             <a href="/terms-of-service.html">Terms of Service</a>
             </div>
-        <p class="footer-tagline">Tripmux compares prices from trusted travel partners.</p>
-        <p class="footer-copyright">© 2026 Tripmux. All rights reserved.</p>
+        <p class="footer-tagline" data-i18n="footerTagline">Tripmux compares prices from trusted travel partners.</p>
+        <p class="footer-copyright" data-i18n="footerCopyright">© 2026 Tripmux. All rights reserved.</p>
           </div>
 </footer>
 

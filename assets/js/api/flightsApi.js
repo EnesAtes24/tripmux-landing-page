@@ -1,6 +1,6 @@
 import { API_BASE } from "../config/env.js";
 
-export async function fetchTopCheapest({ origin, destination, departureAt, currency, limit }) {
+export async function fetchTopCheapest({ origin, destination, departureAt, currency, limit, passengers }) {
     const base = API_BASE.endsWith("/") ? API_BASE.slice(0, -1) : API_BASE;
     const url = new URL(`${base}/flights/cheapest/top`, window.location.origin);
     url.searchParams.set("origin", origin);
@@ -9,6 +9,9 @@ export async function fetchTopCheapest({ origin, destination, departureAt, curre
     url.searchParams.set("currency", currency);
     if (limit !== undefined && limit !== null) {
         url.searchParams.set("limit", String(limit));
+    }
+    if (passengers !== undefined && passengers !== null && passengers > 1) {
+        url.searchParams.set("passengers", String(passengers));
     }
 
     const res = await fetch(url.toString());
@@ -30,11 +33,11 @@ export async function fetchTopCheapest({ origin, destination, departureAt, curre
     }
 }
 
-export async function fetchPlaces(term) {
+export async function fetchPlaces(term, locale = "en") {
     const base = API_BASE.endsWith("/") ? API_BASE.slice(0, -1) : API_BASE;
     const url = new URL(`${base}/places/autocomplete`, window.location.origin);
     url.searchParams.set("term", term);
-    url.searchParams.set("locale", "tr");
+    url.searchParams.set("locale", locale);
 
     const res = await fetch(url.toString());
     if (!res.ok) return [];

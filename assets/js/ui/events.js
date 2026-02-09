@@ -4,6 +4,9 @@ import {
     getOriginInput,
     getDestinationInput,
     getResultsEl,
+    getPassengersInput,
+    getPassengersValue,
+    clampPassengersInput,
     renderFlights,
     renderMenu,
     showError,
@@ -11,12 +14,13 @@ import {
     updateDirectionSummary
 } from "./dom.js";
 import { normalizeIata, isValidIata } from "../utils/validate.js";
+import { getEffectiveCurrency, getLang, t } from "../i18n/locale.js";
 
 function debounce(fn, delay = 250) {
-    let t;
+    let timer;
     return (...args) => {
-        clearTimeout(t);
-        t = setTimeout(() => fn(...args), delay);
+        clearTimeout(timer);
+        timer = setTimeout(() => fn(...args), delay);
     };
 }
 
@@ -58,7 +62,7 @@ function setupAutocomplete(inputId, suggestId) {
         );
         if (term.length < 2) return close();
 
-        const places = await fetchPlaces(term);
+        const places = await fetchPlaces(term, getLang());
         renderMenu(suggest, places, (p) => {
             input.value = (p.code || "").toUpperCase();
             close();
@@ -81,26 +85,26 @@ function setupAutocomplete(inputId, suggestId) {
     document.addEventListener("keydown", (e) => { if (e.key === "Escape") close(); });
 }
 
-async function searchFlights() {
+export async function searchFlights() {
     const originInput = getOriginInput();
     const destinationInput = getDestinationInput();
     const origin = normalizeIata(originInput.value);
     const destination = normalizeIata(destinationInput.value);
     const departureAt = getDepartureAtValue();
-    const currency = "EUR";
+    const currency = getEffectiveCurrency(); // Always use resolved currency for API
 
     if (!origin || !destination || !departureAt) {
-        showError("Please fill all fields.");
+        showError(t("fillAll"));
         return;
     }
 
     if (!isValidIata(origin) || !isValidIata(destination)) {
-        showError("Origin and destination must be exactly 3 letters (A-Z).");
+        showError(t("iataError"));
         return;
     }
 
     if (origin === destination) {
-        showError("Origin and destination cannot be the same.");
+        showError(t("sameRoute"));
         return;
     }
 
@@ -108,16 +112,18 @@ async function searchFlights() {
     destinationInput.value = destination;
     updateDirectionSummary(origin, destination);
 
+    const passengers = getPassengersValue();
+
     setLoading(true);
 
     try {
         if (getDateMode() === "year") {
-            const raw = await fetchTopCheapest({ origin, destination, departureAt, currency, limit: 12 });
+            const raw = await fetchTopCheapest({ origin, destination, departureAt, currency, limit: 12, passengers });
             const monthly = pickCheapestPerMonth(raw);
-            renderFlights(getResultsEl(), monthly, true, monthKeyFromFlight);
+            renderFlights(getResultsEl(), monthly, true, monthKeyFromFlight, passengers);
         } else {
-            const data = await fetchTopCheapest({ origin, destination, departureAt, currency });
-            renderFlights(getResultsEl(), data, false, monthKeyFromFlight);
+            const data = await fetchTopCheapest({ origin, destination, departureAt, currency, passengers });
+            renderFlights(getResultsEl(), data, false, monthKeyFromFlight, passengers);
         }
     } catch (err) {
         showError(err.message || "Error fetching flights.");
@@ -143,6 +149,28 @@ export function bindEvents() {
     document.getElementById("mode-year").addEventListener("click", () => setDateMode("year"));
     document.getElementById("searchBtn").addEventListener("click", searchFlights);
     document.getElementById("swapBtn").addEventListener("click", swapRoute);
+
+    // Passengers +/- buttons and input validation
+    const paxInput = getPassengersInput();
+    const paxMinus = document.getElementById("paxMinus");
+    const paxPlus = document.getElementById("paxPlus");
+
+    if (paxMinus && paxInput) {
+        paxMinus.addEventListener("click", () => {
+            const cur = getPassengersValue();
+            if (cur > 1) paxInput.value = String(cur - 1);
+        });
+    }
+    if (paxPlus && paxInput) {
+        paxPlus.addEventListener("click", () => {
+            const cur = getPassengersValue();
+            if (cur < 9) paxInput.value = String(cur + 1);
+        });
+    }
+    if (paxInput) {
+        paxInput.addEventListener("blur", clampPassengersInput);
+        paxInput.addEventListener("change", clampPassengersInput);
+    }
 
     setupAutocomplete("origin", "origin-suggest");
     setupAutocomplete("destination", "destination-suggest");

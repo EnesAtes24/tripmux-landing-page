@@ -1,5 +1,6 @@
 import { setHint, updateGhostPlaceholder } from "./dom.js";
 import { getTodayDateValue, getCurrentMonthValue } from "../utils/date.js";
+import { t } from "../i18n/locale.js";
 
 let dateMode = "day"; // day | month | year
 
@@ -38,7 +39,7 @@ export function setDateMode(mode) {
         input.step = "1";
         input.value = String(nowYear);
         input.inputMode = "numeric";
-        setHint("Year mode returns the cheapest option for each month from the current month until year-end.");
+        setHint(t("yearModeHint"));
     }
 
     input.addEventListener("input", updateGhostPlaceholder);
