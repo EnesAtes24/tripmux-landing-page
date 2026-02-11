@@ -45,10 +45,11 @@ export const translations = {
         howTitle: "How it works",
         howP1: "We search flights and compare prices from trusted travel partners.",
         howP2: "Soon we'll combine trains and buses to find even cheaper multi-modal routes.",
+        howRedirect: "When you choose a route, Tripmux redirects you to the partner's official website to complete your booking.",
         howNote: "Rail & bus routes are coming soon.",
         partnersTitle: "Partners",
         partnersP1: "We compare prices from trusted travel partners.",
-        partnersList: "Travelpayouts / Aviasales (live) · Kiwi (planned) · Omio (planned) · Flixbus (planned)",
+        partnersList: "We work with trusted travel partners through affiliate networks. Partner availability may vary by route and region.",
 
         // Navbar
         navHow: "How it works",
@@ -107,10 +108,11 @@ export const translations = {
         howTitle: "Nasıl çalışır",
         howP1: "Güvenilir seyahat ortaklarından uçuş arıyor ve fiyatları karşılaştırıyoruz.",
         howP2: "Yakında tren ve otobüsü de ekleyerek daha ucuz çok modlu rotalar bulacağız.",
+        howRedirect: "Bir rota seçtiğinizde, Tripmux sizi rezervasyonunuzu tamamlamak için partner'in resmi web sitesine yönlendirir.",
         howNote: "Tren ve otobüs rotaları yakında.",
         partnersTitle: "Ortaklar",
         partnersP1: "Güvenilir seyahat ortaklarından fiyat karşılaştırıyoruz.",
-        partnersList: "Travelpayouts / Aviasales (aktif) · Kiwi (planlandı) · Omio (planlandı) · Flixbus (planlandı)",
+        partnersList: "Affiliate ağlar aracılığıyla güvenilir seyahat ortaklarıyla çalışıyoruz. Partner kullanılabilirliği rota ve bölgeye göre değişebilir.",
 
         // Navbar
         navHow: "Nasıl çalışır",
