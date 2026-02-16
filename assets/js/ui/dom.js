@@ -290,3 +290,36 @@ export function setLoading(isLoading) {
         btn.textContent = t("search");
     }
 }
+
+/**
+ * Smooth scroll to results section with navbar offset.
+ * Scrolls when results are rendered (including "no results" and error messages).
+ */
+export function scrollToResults() {
+    const resultsEl = getResultsEl();
+    if (!resultsEl) return;
+    
+    // Check if results container has content (not empty, not just loading)
+    const hasContent = resultsEl.innerHTML && 
+                       resultsEl.innerHTML.trim() !== "" && 
+                       !resultsEl.innerHTML.includes("loading");
+    
+    if (!hasContent) return;
+    
+    // Calculate navbar offset dynamically
+    const navbar = document.querySelector(".tmx-navbar");
+    const navbarHeight = navbar ? navbar.offsetHeight : 72; // fallback to 72px
+    const topStripHeight = 12;
+    const padding = 16; // small padding for visual spacing
+    const offset = navbarHeight + padding;
+    
+    // Get results position
+    const resultsTop = resultsEl.getBoundingClientRect().top + window.pageYOffset;
+    const targetPosition = resultsTop - offset;
+    
+    // Smooth scroll
+    window.scrollTo({
+        top: targetPosition,
+        behavior: "smooth"
+    });
+}

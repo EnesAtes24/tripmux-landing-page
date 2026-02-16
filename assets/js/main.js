@@ -13,7 +13,8 @@ initLocale().then(() => {
 });
 
 // ——— Locale change listener ———
-onLocaleChange(({ selectedCurrency: newCurrency, effectiveCurrency: newEffective }) => {
+onLocaleChange(({ lang, selectedCurrency: newCurrency, effectiveCurrency: newEffective }) => {
+    // Always re-apply translations when language or currency changes
     applyI18n();
     syncLocaleSelectors();
     
@@ -40,6 +41,11 @@ function applyI18n() {
         const val = t(key);
         if (typeof val === "string") el.placeholder = val;
     });
+    document.querySelectorAll("[data-i18n-aria]").forEach((el) => {
+        const key = el.getAttribute("data-i18n-aria");
+        const val = t(key);
+        if (typeof val === "string") el.setAttribute("aria-label", val);
+    });
 }
 
 // ——— Sync all locale selectors with current state ———
@@ -48,8 +54,13 @@ function syncLocaleSelectors() {
     const selected = getSelectedCurrency();
     const effective = getEffectiveCurrency();
 
-    // Language segmented toggle
+    // Language segmented toggle (navbar)
     document.querySelectorAll("#langToggle .locale-btn").forEach((btn) => {
+        btn.classList.toggle("active", btn.dataset.lang === lang);
+    });
+    
+    // Language segmented toggle (mobile menu)
+    document.querySelectorAll("#langToggleMobile .locale-btn").forEach((btn) => {
         btn.classList.toggle("active", btn.dataset.lang === lang);
     });
 
@@ -82,14 +93,27 @@ function syncLocaleSelectors() {
 }
 
 // ═══════════════════════════════════════════
-//  LANGUAGE TOGGLE
+//  LANGUAGE TOGGLE (Navbar + Mobile)
 // ═══════════════════════════════════════════
-document.querySelectorAll("#langToggle .locale-btn").forEach((btn) => {
-    btn.addEventListener("click", () => {
-        const lang = btn.dataset.lang;
-        if (lang) setLang(lang);
+function bindLanguageToggles() {
+    // Navbar toggle
+    document.querySelectorAll("#langToggle .locale-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const lang = btn.dataset.lang;
+            if (lang) setLang(lang);
+        });
     });
-});
+    
+    // Mobile menu toggle
+    document.querySelectorAll("#langToggleMobile .locale-btn").forEach((btn) => {
+        btn.addEventListener("click", () => {
+            const lang = btn.dataset.lang;
+            if (lang) setLang(lang);
+        });
+    });
+}
+
+bindLanguageToggles();
 
 // ═══════════════════════════════════════════
 //  CURRENCY CUSTOM DROPDOWN

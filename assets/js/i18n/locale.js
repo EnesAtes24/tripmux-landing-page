@@ -12,7 +12,7 @@ import { API_BASE } from "../config/env.js";
 import { translations } from "./translations.js";
 
 // ——— Storage keys ———
-const LANG_KEY = "tripmux_lang";
+const LANG_OVERRIDE_KEY = "tmx_lang_override"; // User manual selection
 const CURRENCY_KEY = "tripmux.currency";
 const CURRENCY_AUTO_RESOLVED_KEY = "tripmux.currency.autoResolved";
 
@@ -73,7 +73,8 @@ export function t(key) {
 export function setLang(lang) {
     if (!SUPPORTED_LANGS.includes(lang)) return;
     currentLang = lang;
-    localStorage.setItem(LANG_KEY, lang);
+    // Set override when user manually selects language
+    localStorage.setItem(LANG_OVERRIDE_KEY, lang);
     document.documentElement.lang = lang;
     notifyListeners();
 }
@@ -105,14 +106,48 @@ export async function setCurrency(currency) {
     notifyListeners();
 }
 
+// ——— Location-based language detection ———
+
+/**
+ * Detect language based on location (Turkey => TR, else EN).
+ * Uses heuristics: timezone, navigator.language.
+ * 
+ * TODO: Enhance with API country detection if available.
+ * The /meta/client-context endpoint may provide country info.
+ * Example integration:
+ *   const context = await fetchClientContext();
+ *   if (context?.country === "TR") return "tr";
+ */
+function getAutoLanguage() {
+    // Method 1: Check timezone (most reliable for Turkey)
+    try {
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        if (timezone === "Europe/Istanbul") {
+            return "tr";
+        }
+    } catch (e) {
+        // Fallback if timezone detection fails
+    }
+    
+    // Method 2: Check navigator.language
+    const browserLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
+    if (browserLang.startsWith("tr")) {
+        return "tr";
+    }
+    
+    // Default: English
+    return "en";
+}
+
 // ——— Initialization ———
 
 /**
  * Initialize locale preferences.
  *
  * Language priority:
- *   1) localStorage
- *   2) navigator.language
+ *   1) URL param ?lang=tr or ?lang=en (immediate, sets override)
+ *   2) localStorage tmx_lang_override (user manual selection)
+ *   3) getAutoLanguage() (location-based: Turkey => TR, else EN)
  *
  * Currency priority:
  *   1) localStorage tripmux.currency (if present)
@@ -123,12 +158,22 @@ export async function initLocale() {
     initialized = true;
 
     // --- Language ---
-    const storedLang = localStorage.getItem(LANG_KEY);
-    if (storedLang && SUPPORTED_LANGS.includes(storedLang)) {
-        currentLang = storedLang;
+    // Check URL param first
+    const urlParams = new URLSearchParams(window.location.search);
+    const urlLang = urlParams.get("lang");
+    if (urlLang && SUPPORTED_LANGS.includes(urlLang)) {
+        currentLang = urlLang;
+        localStorage.setItem(LANG_OVERRIDE_KEY, urlLang);
     } else {
-        const browserLang = (navigator.language || navigator.userLanguage || "en").toLowerCase();
-        currentLang = browserLang.startsWith("tr") ? "tr" : "en";
+        // Check localStorage override (user manual selection)
+        const overrideLang = localStorage.getItem(LANG_OVERRIDE_KEY);
+        if (overrideLang && SUPPORTED_LANGS.includes(overrideLang)) {
+            currentLang = overrideLang;
+        } else {
+            // Use location-based auto-detection
+            currentLang = getAutoLanguage();
+            // Do NOT persist auto-detection to override (only persist when user manually selects)
+        }
     }
 
     // --- Currency: single source of truth ---

@@ -4,70 +4,95 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Privacy Policy | Tripmux</title>
-    <link rel="icon" type="image/png" href="/public/favicon.png">
+    <meta name="description" content="Tripmux respects your privacy. Learn about our privacy policy and data practices." />
+    <meta property="og:title" content="Privacy Policy | Tripmux" />
+    <meta property="og:description" content="Tripmux respects your privacy. Learn about our privacy policy and data practices." />
+    <meta property="og:type" content="website" />
+    <link rel="canonical" href="https://tripmux.com/privacy-policy.html" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/android-chrome-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/android-chrome-512x512.png">
     <link rel="stylesheet" href="/assets/css/styles.css?v=20260205" />
 </head>
 <body>
   <header class="tmx-navbar">
     <div class="tmx-navbar__inner">
-      <a class="tmx-brand" href="/">
-        <img src="/public/tripmux-logo-light.svg" alt="Tripmux Logo" class="nav-logo" height="36" style="height:36px;width:auto;max-height:36px;display:block;">
-      </a>
-
-      <nav class="tmx-nav" aria-label="Primary">
-        <a href="/index.html#how" class="tmx-nav__link">How it works</a>
-        <a href="/index.html#partners" class="tmx-nav__link">Partners</a>
-        <a href="/about.html" class="tmx-nav__link">About</a>
-        <a href="/contact.html" class="tmx-nav__link">Contact</a>
-      </nav>
-
-      <div class="tmx-actions">
-        <a href="/index.html#search" class="tmx-cta">Find cheapest route</a>
-        <button class="tmx-burger" aria-label="Open menu" aria-expanded="false" type="button">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <line x1="3" y1="12" x2="21" y2="12"></line>
-            <line x1="3" y1="6" x2="21" y2="6"></line>
-            <line x1="3" y1="18" x2="21" y2="18"></line>
-          </svg>
-        </button>
+      <div class="tmx-navbar__left">
+        <a class="tmx-brand" href="/">
+          <img src="/public/tripmux-logo-light.svg" alt="Tripmux Logo" class="nav-logo">
+        </a>
+      </div>
+      <div class="tmx-navbar__center">
+        <nav class="tmx-nav" aria-label="Primary">
+          <a href="/index.html#how" class="tmx-nav__link" data-i18n="navHow">How it works</a>
+          <a href="/index.html#partners" class="tmx-nav__link" data-i18n="navPartners">Partners</a>
+          <a href="/about.html" class="tmx-nav__link" data-i18n="navAbout">About</a>
+          <a href="/contact.html" class="tmx-nav__link" data-i18n="navContact">Contact</a>
+        </nav>
+      </div>
+      <div class="tmx-navbar__right">
+        <div class="tmx-actions">
+          <div class="tmx-navbar-lang-toggle">
+            <div class="locale-toggle" id="langToggle" role="radiogroup" aria-label="Language">
+              <button type="button" class="locale-btn" data-lang="tr">TR</button>
+              <button type="button" class="locale-btn active" data-lang="en">EN</button>
+            </div>
+          </div>
+          <a href="/index.html#search" class="tmx-cta" data-i18n="navCta">Find cheapest route</a>
+          <button class="tmx-burger" aria-label="Open menu" aria-expanded="false" type="button">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="3" y1="12" x2="21" y2="12"></line>
+              <line x1="3" y1="6" x2="21" y2="6"></line>
+              <line x1="3" y1="18" x2="21" y2="18"></line>
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
     <div class="tmx-mobile-menu" hidden>
-      <a href="/index.html#how" class="tmx-mobile-link">How it works</a>
-      <a href="/index.html#partners" class="tmx-mobile-link">Partners</a>
-      <a href="/about.html" class="tmx-mobile-link">About</a>
-      <a href="/contact.html" class="tmx-mobile-link">Contact</a>
-      <a href="/index.html#search" class="tmx-mobile-cta">Find cheapest route</a>
+      <div class="tmx-mobile-lang-toggle">
+        <div class="locale-toggle" id="langToggleMobile" role="radiogroup" aria-label="Language">
+          <button type="button" class="locale-btn" data-lang="tr">TR</button>
+          <button type="button" class="locale-btn active" data-lang="en">EN</button>
+        </div>
+      </div>
+      <a href="/index.html#how" class="tmx-mobile-link" data-i18n="navHow">How it works</a>
+      <a href="/index.html#partners" class="tmx-mobile-link" data-i18n="navPartners">Partners</a>
+      <a href="/about.html" class="tmx-mobile-link" data-i18n="navAbout">About</a>
+      <a href="/contact.html" class="tmx-mobile-link" data-i18n="navContact">Contact</a>
+      <a href="/index.html#search" class="tmx-mobile-cta" data-i18n="navCta">Find cheapest route</a>
     </div>
   </header>
 
   <div class="container">
     <div class="static-page">
-        <h1>Privacy Policy</h1>
-        <p>Tripmux respects your privacy.</p>
-        <p>We do not collect personal data directly. We use cookies and third-party analytics tools to understand how users interact with our website and improve our service. We may use affiliate tracking technologies (e.g., referral parameters and cookies) to measure referrals to partner websites.</p>
-        <p>Some outbound links on Tripmux are affiliate links. When users click these links and make a purchase on a partner website, we may earn a commission at no additional cost to the user.</p>
-        <p>Tripmux does not sell personal data.</p>
-        <p>By using this website, you agree to the use of cookies and analytics technologies as described above.</p>
+        <h1 data-i18n="privacyTitle">Privacy Policy</h1>
+        <p data-i18n="privacyP1">Tripmux respects your privacy.</p>
+        <p data-i18n="privacyP2">We do not collect personal data directly. We use cookies and third-party analytics tools to understand how users interact with our website and improve our service. We may use affiliate tracking technologies (e.g., referral parameters and cookies) to measure referrals to partner websites.</p>
+        <p data-i18n="privacyP3">Some outbound links on Tripmux are affiliate links. When users click these links and make a purchase on a partner website, we may earn a commission at no additional cost to the user.</p>
+        <p data-i18n="privacyP4">Tripmux does not sell personal data.</p>
+        <p data-i18n="privacyP5">By using this website, you agree to the use of cookies and analytics technologies as described above.</p>
     </div>
 </div>
 
 <footer class="site-footer">
     <div class="container">
         <div class="footer-links">
-            <a href="/about.html">About</a>
+            <a href="/about.html" data-i18n="footerAbout">About</a>
             <span class="footer-separator">|</span>
-            <a href="/contact.html">Contact</a>
+            <a href="/contact.html" data-i18n="footerContact">Contact</a>
             <span class="footer-separator">|</span>
-            <a href="/privacy-policy.html">Privacy Policy</a>
+            <a href="/privacy-policy.html" data-i18n="footerPrivacy">Privacy Policy</a>
             <span class="footer-separator">|</span>
-            <a href="/terms-of-service.html">Terms of Service</a>
+            <a href="/terms-of-service.html" data-i18n="footerTerms">Terms of Service</a>
         </div>
-        <p class="footer-tagline">Tripmux compares prices from trusted travel partners.</p>
-        <p class="footer-disclosure">Some outbound links on Tripmux are affiliate links. When you click and book on a partner website, we may earn a commission at no additional cost to you.</p>
-        <p class="footer-disclosure">Tripmux is an independent travel comparison platform and does not operate transportation services.</p>
-        <p class="footer-copyright">© 2026 Tripmux. All rights reserved.</p>
+        <p class="footer-tagline" data-i18n="footerTagline">Tripmux compares prices from trusted travel partners.</p>
+        <p class="footer-disclosure" data-i18n="footerDisclosure1">Some outbound links on Tripmux are affiliate links. When you click and book on a partner website, we may earn a commission at no additional cost to you.</p>
+        <p class="footer-disclosure" data-i18n="footerDisclosure2">Tripmux is an independent travel comparison platform and does not operate transportation services.</p>
+        <p class="footer-copyright" data-i18n="footerCopyright">© 2026 Tripmux. All rights reserved.</p>
     </div>
 </footer>
 

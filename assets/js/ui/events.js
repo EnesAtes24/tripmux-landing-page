@@ -11,7 +11,8 @@ import {
     renderMenu,
     showError,
     setLoading,
-    updateDirectionSummary
+    updateDirectionSummary,
+    scrollToResults
 } from "./dom.js";
 import { normalizeIata, isValidIata } from "../utils/validate.js";
 import { getEffectiveCurrency, getLang, t } from "../i18n/locale.js";
@@ -130,8 +131,17 @@ export async function searchFlights() {
             console.debug(`[Tripmux] Response: ${data.length} flights, first currency: ${data[0]?.currency || 'N/A'}`);
             renderFlights(getResultsEl(), data, false, monthKeyFromFlight, passengers);
         }
+        
+        // Auto-scroll to results after rendering (with small delay to ensure DOM is updated)
+        setTimeout(() => {
+            scrollToResults();
+        }, 100);
     } catch (err) {
         showError(err.message || "Error fetching flights.");
+        // Also scroll to error message
+        setTimeout(() => {
+            scrollToResults();
+        }, 100);
     } finally {
         setLoading(false);
     }
