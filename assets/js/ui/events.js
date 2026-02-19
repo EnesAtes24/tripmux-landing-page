@@ -159,13 +159,19 @@ function swapRoute() {
 }
 
 export function bindEvents() {
-    document.getElementById("mode-day").addEventListener("click", () => setDateMode("day"));
-    document.getElementById("mode-month").addEventListener("click", () => setDateMode("month"));
-    document.getElementById("mode-year").addEventListener("click", () => setDateMode("year"));
-    document.getElementById("searchBtn").addEventListener("click", searchFlights);
-    document.getElementById("swapBtn").addEventListener("click", swapRoute);
+    // Index page only: search UI may be absent on about/contact/privacy/terms — guard to avoid breaking script
+    const modeDay = document.getElementById("mode-day");
+    const modeMonth = document.getElementById("mode-month");
+    const modeYear = document.getElementById("mode-year");
+    const searchBtn = document.getElementById("searchBtn");
+    const swapBtn = document.getElementById("swapBtn");
 
-    // Passengers +/- buttons and input validation
+    if (modeDay) modeDay.addEventListener("click", () => setDateMode("day"));
+    if (modeMonth) modeMonth.addEventListener("click", () => setDateMode("month"));
+    if (modeYear) modeYear.addEventListener("click", () => setDateMode("year"));
+    if (searchBtn) searchBtn.addEventListener("click", searchFlights);
+    if (swapBtn) swapBtn.addEventListener("click", swapRoute);
+
     const paxInput = getPassengersInput();
     const paxMinus = document.getElementById("paxMinus");
     const paxPlus = document.getElementById("paxPlus");
@@ -187,12 +193,19 @@ export function bindEvents() {
         paxInput.addEventListener("change", clampPassengersInput);
     }
 
-    setupAutocomplete("origin", "origin-suggest");
-    setupAutocomplete("destination", "destination-suggest");
+    const originInput = document.getElementById("origin");
+    const suggestOrigin = document.getElementById("origin-suggest");
+    const suggestDest = document.getElementById("destination-suggest");
+    if (originInput && suggestOrigin) setupAutocomplete("origin", "origin-suggest");
+    if (document.getElementById("destination") && suggestDest) setupAutocomplete("destination", "destination-suggest");
 
     setDateMode("day");
-    updateDirectionSummary(
-        normalizeIata(getOriginInput().value),
-        normalizeIata(getDestinationInput().value)
-    );
+    const origin = getOriginInput();
+    const dest = getDestinationInput();
+    if (origin && dest) {
+        updateDirectionSummary(
+            normalizeIata(origin.value),
+            normalizeIata(dest.value)
+        );
+    }
 }
