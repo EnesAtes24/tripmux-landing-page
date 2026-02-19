@@ -97,6 +97,16 @@ export const translations = {
         // Locale selector
         language: "Language",
         currency: "Currency",
+
+        // Affiliate section (More options)
+        affiliateSectionTitle: "More options",
+        affiliateSectionSubtitle: "Book via trusted partners (affiliate links).",
+        affiliateKiwiTitle: "Kiwi.com",
+        affiliateKiwiDesc: "Flights and connections worldwide.",
+        affiliate12GoTitle: "12Go",
+        affiliate12GoDesc: "Buses, trains & ferries in Asia.",
+        affiliateCta: "Open",
+        affiliateDisclosureShort: "Some links are affiliate links; you pay the same.",
     },
     tr: {
         // Search form labels
@@ -192,5 +202,15 @@ export const translations = {
         // Locale selector
         language: "Dil",
         currency: "Para Birimi",
+
+        // Affiliate section (More options)
+        affiliateSectionTitle: "Ek seçenekler",
+        affiliateSectionSubtitle: "Güvenilir partnerler üzerinden rezervasyon (affiliate link).",
+        affiliateKiwiTitle: "Kiwi.com",
+        affiliateKiwiDesc: "Dünya genelinde uçuş ve bağlantılar.",
+        affiliate12GoTitle: "12Go",
+        affiliate12GoDesc: "Asya'da otobüs, tren ve feribot.",
+        affiliateCta: "Aç",
+        affiliateDisclosureShort: "Bazı linkler affiliate'dir; fiyat değişmez.",
     },
 };

@@ -1,4 +1,5 @@
 import { t, getEffectiveCurrency, getLang } from "../i18n/locale.js";
+import { AFFILIATES } from "../config/affiliates.js";
 
 export function getResultsEl() {
     return document.getElementById("results");
@@ -155,12 +156,92 @@ function renderFlightCard(flight, yearMode, monthKeyFromFlight, index, requested
     `;
 }
 
+/**
+ * Safe affiliate click tracking: if gtag exists, send event; otherwise no-op.
+ */
+function trackAffiliateClick(partnerId) {
+    try {
+        if (typeof window !== "undefined" && window.gtag) {
+            window.gtag("event", "affiliate_click", { partner: partnerId });
+        }
+    } catch (_) {
+        // no-op
+    }
+}
+
+/**
+ * Render the "More options" affiliate section below the results list.
+ * Only shown after search (when this is called from renderFlights).
+ * Reuses or replaces existing section to avoid duplication.
+ */
+export function renderAffiliateSection(containerEl, _context) {
+    if (!containerEl) return;
+    const resultsEl = getResultsEl();
+    const parent = resultsEl ? resultsEl.parentElement : containerEl;
+    if (!parent || !resultsEl) return;
+
+    let section = parent.querySelector(".affiliate-section");
+    if (section) section.remove();
+
+    section = document.createElement("section");
+    section.className = "affiliate-section";
+    section.setAttribute("aria-label", t("affiliateSectionTitle"));
+
+    const title = document.createElement("h3");
+    title.className = "affiliate-section__title";
+    title.textContent = t("affiliateSectionTitle");
+    section.appendChild(title);
+
+    const subtitle = document.createElement("p");
+    subtitle.className = "affiliate-section__subtitle";
+    subtitle.textContent = t("affiliateSectionSubtitle");
+    section.appendChild(subtitle);
+
+    const grid = document.createElement("div");
+    grid.className = "affiliate-grid";
+
+    for (const partner of AFFILIATES) {
+        const card = document.createElement("div");
+        card.className = "affiliate-card";
+
+        const top = document.createElement("div");
+        top.className = "affiliate-card__top";
+        top.innerHTML = `<span class="affiliate-card__icon" aria-hidden="true">${escapeHtml(partner.icon)}</span><span class="affiliate-card__title">${escapeHtml(t(partner.titleKey) || partner.name)}</span>`;
+        card.appendChild(top);
+
+        const desc = document.createElement("p");
+        desc.className = "affiliate-card__desc";
+        desc.textContent = t(partner.descriptionKey) || "";
+        card.appendChild(desc);
+
+        const cta = document.createElement("a");
+        cta.href = partner.url;
+        cta.target = "_blank";
+        cta.rel = "nofollow sponsored noopener noreferrer";
+        cta.className = "affiliate-card__cta";
+        cta.textContent = t("affiliateCta");
+        cta.addEventListener("click", () => trackAffiliateClick(partner.id));
+        card.appendChild(cta);
+
+        grid.appendChild(card);
+    }
+    section.appendChild(grid);
+
+    const disclosure = document.createElement("p");
+    disclosure.className = "affiliate-disclosure";
+    disclosure.textContent = t("affiliateDisclosureShort");
+    section.appendChild(disclosure);
+
+    parent.insertBefore(section, resultsEl.nextSibling);
+}
+
 export function renderFlights(container, flights, yearMode, monthKeyFromFlight, passengers) {
     container.className = 'results-list';
     container.innerHTML = "";
 
     if (!flights || flights.length === 0) {
         container.innerHTML = t("noResults");
+        renderAffiliateSection(container.parentElement, {});
         return;
     }
 
@@ -203,6 +284,7 @@ export function renderFlights(container, flights, yearMode, monthKeyFromFlight, 
 
     const cardsHtml = flights.map((flight, i) => renderFlightCard(flight, yearMode, monthKeyFromFlight, i, requestedCurrency)).join('');
     container.innerHTML = paxInfo + currencyWarning + cardsHtml;
+    renderAffiliateSection(container.parentElement, {});
 }
 
 export function escapeHtml(str) {
